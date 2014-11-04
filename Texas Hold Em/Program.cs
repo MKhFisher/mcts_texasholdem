@@ -49,6 +49,7 @@ namespace Texas_Hold_Em
     /// <summary>
     /// Card object which holds suit and number.
     /// </summary>
+	/// test 
     public class Card
     {
         public Suit suit { get; set; }
