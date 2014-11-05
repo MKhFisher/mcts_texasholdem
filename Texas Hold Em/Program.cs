@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -139,7 +140,7 @@ namespace Texas_Hold_Em
             m_connection = new SqlConnection("Server=localhost;Database=texas;Integrated Security=SSPI;MultipleActiveResultSets=true");
             m_connection.Open();
 
-            int iterations = 10000;
+            int iterations = 10000000;
             
             //// Test code to ensure Deck class performs as expected.
             //Hashtable ht = new Hashtable();
@@ -161,15 +162,21 @@ namespace Texas_Hold_Em
 
             //TestCardCombinations();
 
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+
             for (int i = 0; i < iterations; i++)
             {
                 DealHoldEmHand(deck, 8, 5);
                 deck = new Deck();
             }
 
+            timer.Stop();
+
             m_connection.Close();
 
             Console.WriteLine("Finished.");
+            Console.WriteLine("Time elapsed: {0}", timer.Elapsed);
             Console.ReadKey();
         }
 
