@@ -257,8 +257,8 @@ namespace Texas_Hold_Em
         {
             bool IsNew = false;
             SqlCommand IsInDB = new SqlCommand("SELECT COUNT(*) FROM results WHERE pocket = @pocket AND flop = @flop AND turn = @turn AND river = @river", m_connection);
-            
-            pocket = pocket.OrderBy(x => x.number).OrderBy(x => x.suit).ToList();
+
+            pocket = pocket.Where(x => x != null).OrderBy(x => x.number).ThenBy(y => y.suit).ToList();
             string pocket_string = "";
             foreach (Card card in pocket)
             {
