@@ -10,19 +10,20 @@ namespace Texas_Hold_Em
     {
         public static bool ContainsRoyalFlush(this List<Card> hand)
 		{	
-            // Orders 7 cards in descending order and removes last two 
-			// (royal flush must be the 5 highest cards in the game 
-			// therefore we don't care about the extra 2 cards).
-			hand = hand.Where(x => x != null).OrderByDescending(x => x.number).ToList();
-            hand.RemoveAt(hand.Count - 1);
-            hand.RemoveAt(hand.Count - 1);
+			// Get cards of the same suit and sort them
+			hand = hand.Where(x => x != null)
+				.OrderByDescending(x => x.number)
+				.GroupBy(x => x.suit)
+				.Where(y => y.Count() >= 5)
+				.SelectMany(x => x).ToList();
 
-			if (hand[0].number != Number.Ace) {
-				return false;
+			// Trim until hand is 5.
+			while (hand.Count > 5) {
+				hand.RemoveAt(hand.Count - 1);
 			}
-
-            // Checks to see if remaining 5 cards is a straight.
-			return ContainsStraight(hand) && ContainsFlush(hand);
+				
+            // Checks to see if remaining 5 cards is a straight with Ace.
+			return (hand.Any(x => x.number == Number.Ace) && ContainsStraightFlush(hand));
         }
 
         public static bool ContainsStraightFlush(this List<Card> hand)
